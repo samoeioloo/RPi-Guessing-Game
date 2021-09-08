@@ -8,10 +8,10 @@ import os
 end_of_game = None  # set if the user wins or ends the game
 
 # DEFINE THE PINS USED HERE
-LED_value = [11, 13, 15]
-LED_accuracy = 32
-btn_submit = 16
-btn_increase = 18
+LED_value = [2, 3, 0]
+LED_accuracy = 26
+btn_submit = 4
+btn_increase = 5
 buzzer = None
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
