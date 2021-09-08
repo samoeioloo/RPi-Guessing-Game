@@ -3,18 +3,15 @@ import RPi.GPIO as GPIO
 import random
 import ES2EEPROMUtils
 import os
-import time
 
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
-done = False # set if the user is done guessing
-presses = []
 
 # DEFINE THE PINS USED HERE
-LED_value = [27, 22, 17]
-LED_accuracy = 12
-btn_submit = 23
-btn_increase = 24
+LED_value = [2, 3, 0]
+LED_accuracy = 26
+btn_submit = 4
+btn_increase = 5
 buzzer = None
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
@@ -48,7 +45,6 @@ def menu():
         print("Use the buttons on the Pi to make and submit your guess!")
         print("Press and hold the guess button to cancel your game")
         value = generate_number()
-        print("Number: ", value)
         while not end_of_game:
             pass
     elif option == "Q":
@@ -67,30 +63,15 @@ def display_scores(count, raw_data):
 
 # Setup Pins
 def setup():
-    print("Setting up...")
     # Setup board mode
     GPIO.setmode(GPIO.BCM)
     # Setup regular GPIO
-    print(LED_value[0])
-    for i in range(len(LED_value)):
-    	GPIO.setup(LED_value[i], GPIO.OUT) #out for now to test connections and pin numbering
-    	#GPIO.output(LED_value[i], GPIO.HIGH)
-
-    GPIO.setup(LED_accuracy, GPIO.OUT)
-    
-    GPIO.setup(btn_increase, GPIO.IN)
-    GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=buttonEventHandler_rising)
-    #GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback=buttonEventHandler_falling)	
-    GPIO.setup(btn_submit, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
-
+    for i in range(len(LED_value[0]))
+    GPIO.setup(LED_value[0])
     # Setup PWM channels
     # Setup debouncing and callbacks
-    print("Exiting setup...")
     pass
 
-def button_callback(channel):
-	print("Button pushed")
 
 # Load high scores
 def fetch_scores():
@@ -118,48 +99,13 @@ def save_scores():
 def generate_number():
     return random.randint(0, pow(2, 3)-1)
 
-def buttonEventHandler_rising(channel):
-	GPIO.output(LED_value[0], GPIO.HIGH)
-	raise Exception("Button pressed")
-def buttonEventHandler_falling(channel):
-	GPIO.output(LED_value)
-# Increase button pressed
-#GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=buttonEventHandler_rising)
-#GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback=buttonEventHandler_falling)
-def btn_increase_pressed(channel):
-	#GPIO.add_event_detect(channel, GPIO.RISING, callback=buttonEventHandler_rising)
-	#GPIO.add_event_detect(channel, GPIO.FALLING, callback=buttonEventHandler_falling)
-	
-	while True:
-		if GPIO.event_detected(channel):
-			print("Button pressed")
-			sleep(1)
-			#print("Button pressed")
-	#	input = GPIO.input(channel)
-	#	print("Input: ")
-	#	if not input:
-	#		startTime = time.time()
-	#		GPIO.output(LED_value[0], GPIO.HIGH)
-		#	while not input:
-		#		input = GPIO.input(channel)
-	#	else:
-	#		end_time = time.time()
-	#		GPIO.output(LED_value[0], GPIO.LOW)
-		#GPIO.add_event_detect(channel, GPIO.RISING, callback=button_callback)
-	
-#print("Entering button increase")
-    # Check if button has been pressed
-	#if (GPIO.input(channel)):
-	#	print("Button pressed")
 
-	#try:
-	#	GPIO.wait_for_edge(channel, GPIO.FALLING)
-	#	print("Button pressed")
-    #print("Printing guess value", guess)
+# Increase button pressed
+def btn_increase_pressed(channel):
     # Increase the value shown on the LEDs
     # You can choose to have a global variable store the user's current guess,
     # or just pull the value off the LEDs when a user makes a guess
-  #  pass
+    pass
 
 
 # Guess button
@@ -201,13 +147,9 @@ if __name__ == "__main__":
     try:
         # Call setup function
         setup()
-    #print("Switching on green LEDs")
-#    print(len(LED_value))
-        #GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=button_callback)
-        #welcome()
-        btn_increase_pressed(btn_increase)
+        welcome()
         while True:
-          #  menu()
+            menu()
             pass
     except Exception as e:
         print(e)
