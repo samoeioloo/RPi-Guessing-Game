@@ -8,10 +8,10 @@ import os
 end_of_game = None  # set if the user wins or ends the game
 
 # DEFINE THE PINS USED HERE
-LED_value = [2, 3, 0]
-LED_accuracy = 26
-btn_submit = 4
-btn_increase = 5
+LED_value = [17, 27, 22]
+LED_accuracy = 12
+btn_submit = 23
+btn_increase = 24
 buzzer = None
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
@@ -63,16 +63,24 @@ def display_scores(count, raw_data):
 
 # Setup Pins
 def setup():
+	print("Setting up...")
     # Setup board mode
-    GPIO.setmode(GPIO.BCM)
+	GPIO.setmode(GPIO.BCM)
     # Setup regular GPIO
-    for i in range(len(LED_value[0]))
-    GPIO.setup(LED_value[0])
+	for i in range(len(LED_value)):
+		GPIO.setup(LED_value[i], GPIO.OUT)
+		GPIO.output(LED_value[i], GPIO.HIGH)
+	GPIO.setup(btn_increase, GPIO.IN)
+	GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=button_callback)
+	#GPIO.setup(LED_value[0])
     # Setup PWM channels
     # Setup debouncing and callbacks
-    pass
+#	GPIO.output(LED_value[0], GPIO.HIGH)
+	print("Setup complete")
+	pass
 
-
+def button_callback(pin):
+	print("Button pressed")
 # Load high scores
 def fetch_scores():
     # get however many scores there are
@@ -147,9 +155,9 @@ if __name__ == "__main__":
     try:
         # Call setup function
         setup()
-        welcome()
+        #welcome()
         while True:
-            menu()
+         #   menu()
             pass
     except Exception as e:
         print(e)
