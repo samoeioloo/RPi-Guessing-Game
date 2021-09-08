@@ -8,10 +8,10 @@ import os
 end_of_game = None  # set if the user wins or ends the game
 
 # DEFINE THE PINS USED HERE
-LED_value = [2, 3, 0]
-LED_accuracy = 26
-btn_submit = 4
-btn_increase = 5
+LED_value = [27, 22, 17]
+LED_accuracy = 12
+btn_submit = 23
+btn_increase = 24
 buzzer = None
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
@@ -69,9 +69,9 @@ def setup():
     # Setup regular GPIO
     print(LED_value[0])
     for i in range(len(LED_value)):
-        print(i)
-        GPIO.setup(LED_value[i], GPIO.OUT) #out for now to test connections and pin numbering
-        GPIO.output(LED_value[i], GPIO.HIGH)
+    	GPIO.setup(LED_value[i], GPIO.OUT) #out for now to test connections and pin numbering
+    	#GPIO.output(LED_value[i], GPIO.HIGH)
+
     GPIO.setup(LED_accuracy, GPIO.OUT)
     GPIO.setup(btn_increase, GPIO.IN)
     GPIO.setup(btn_submit, GPIO.IN)
@@ -160,9 +160,9 @@ if __name__ == "__main__":
     #print("Switching on green LEDs")
 #    print(len(LED_value))
 
-        welcome()
+        #welcome()
         while True:
-            menu()
+          #  menu()
             pass
     except Exception as e:
         print(e)
