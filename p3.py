@@ -63,11 +63,15 @@ def display_scores(count, raw_data):
 
 # Setup Pins
 def setup():
+    print("Setting up...")
     # Setup board mode
     GPIO.setmode(GPIO.BCM)
     # Setup regular GPIO
+    print(LED_value[0])
     for i in range(len(LED_value)):
+        print(i)
         GPIO.setup(LED_value[i], GPIO.OUT) #out for now to test connections and pin numbering
+        GPIO.output(LED_value[i], GPIO.HIGH)
     GPIO.setup(LED_accuracy, GPIO.OUT)
     GPIO.setup(btn_increase, GPIO.IN)
     GPIO.setup(btn_submit, GPIO.IN)
@@ -75,6 +79,7 @@ def setup():
 
     # Setup PWM channels
     # Setup debouncing and callbacks
+    print("Exiting setup...")
     pass
 
 
@@ -154,8 +159,7 @@ if __name__ == "__main__":
         setup()
     #print("Switching on green LEDs")
 #    print(len(LED_value))
-        for i in range(len(LED_value)):
-            GPIO.output(LED_value[i], GPIO.HIGH)
+
         welcome()
         while True:
             menu()
