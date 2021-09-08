@@ -75,7 +75,9 @@ def setup():
     	#GPIO.output(LED_value[i], GPIO.HIGH)
 
     GPIO.setup(LED_accuracy, GPIO.OUT)
+    
     GPIO.setup(btn_increase, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    #GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=btn_increase_pressed)
     GPIO.setup(btn_submit, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
@@ -114,17 +116,16 @@ def generate_number():
 
 # Increase button pressed
 def btn_increase_pressed(channel):
+	print("Entering button increase")
     # Check if button has been pressed
-    while not done:
-        if GPIO.input(btn_increase) == GPIO.HIGH:
-            print("Guess button pushed")
-            guess += 1
-        done = False
-    print("Printing guess value", guess)
+	try:
+		GPIO.wait_for_edge(channel, GPIO.FALLING)
+		print("Button pressed")
+    #print("Printing guess value", guess)
     # Increase the value shown on the LEDs
     # You can choose to have a global variable store the user's current guess,
     # or just pull the value off the LEDs when a user makes a guess
-    pass
+    #pass
 
 
 # Guess button
@@ -170,6 +171,7 @@ if __name__ == "__main__":
 #    print(len(LED_value))
 
         #welcome()
+        btn_increase_pressed(btn_increase)
         while True:
           #  menu()
             pass
