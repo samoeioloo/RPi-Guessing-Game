@@ -152,6 +152,8 @@ if __name__ == "__main__":
     try:
         # Call setup function
         setup()
+    #print("Switching on green LEDs")
+#    print(len(LED_value))
         for i in range(len(LED_value)):
             GPIO.output(LED_value[i], GPIO.HIGH)
         welcome()
