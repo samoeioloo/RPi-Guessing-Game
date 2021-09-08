@@ -64,7 +64,15 @@ def display_scores(count, raw_data):
 # Setup Pins
 def setup():
     # Setup board mode
+    GPIO.setmode(GPIO.BCM)
     # Setup regular GPIO
+    for i in range(len(LED_value)):
+        GPIO.setup(LED_value[i], GPIO.OUT) #out for now to test connections and pin numbering
+    GPIO.setup(LED_accuracy, GPIO.OUT)
+    GPIO.setup(btn_increase, GPIO.IN)
+    GPIO.setup(btn_submit, GPIO.IN)
+
+
     # Setup PWM channels
     # Setup debouncing and callbacks
     pass
@@ -75,9 +83,9 @@ def fetch_scores():
     # get however many scores there are
     score_count = None
     # Get the scores
-    
+
     # convert the codes back to ascii
-    
+
     # return back the results
     return score_count, scores
 
@@ -100,7 +108,7 @@ def generate_number():
 # Increase button pressed
 def btn_increase_pressed(channel):
     # Increase the value shown on the LEDs
-    # You can choose to have a global variable store the user's current guess, 
+    # You can choose to have a global variable store the user's current guess,
     # or just pull the value off the LEDs when a user makes a guess
     pass
 
@@ -144,6 +152,8 @@ if __name__ == "__main__":
     try:
         # Call setup function
         setup()
+        for i in range(len(LED_value)):
+            GPIO.output(LED_value[i], GPIO.HIGH)
         welcome()
         while True:
             menu()
