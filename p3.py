@@ -6,6 +6,7 @@ import os
 
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
+done = False # set if the user is done guessing
 
 # DEFINE THE PINS USED HERE
 LED_value = [27, 22, 17]
@@ -45,6 +46,7 @@ def menu():
         print("Use the buttons on the Pi to make and submit your guess!")
         print("Press and hold the guess button to cancel your game")
         value = generate_number()
+        print("Number: ", value)
         while not end_of_game:
             pass
     elif option == "Q":
@@ -73,8 +75,8 @@ def setup():
     	#GPIO.output(LED_value[i], GPIO.HIGH)
 
     GPIO.setup(LED_accuracy, GPIO.OUT)
-    GPIO.setup(btn_increase, GPIO.IN)
-    GPIO.setup(btn_submit, GPIO.IN)
+    GPIO.setup(btn_increase, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(btn_submit, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 
     # Setup PWM channels
@@ -112,6 +114,13 @@ def generate_number():
 
 # Increase button pressed
 def btn_increase_pressed(channel):
+    # Check if button has been pressed
+    while not done:
+        if GPIO.input(btn_increase) == GPIO.HIGH:
+            print("Guess button pushed")
+            guess += 1
+        done = False
+    print("Printing guess value", guess)
     # Increase the value shown on the LEDs
     # You can choose to have a global variable store the user's current guess,
     # or just pull the value off the LEDs when a user makes a guess
