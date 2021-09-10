@@ -1,8 +1,10 @@
+
 # Import libraries
 import RPi.GPIO as GPIO
 import random
 import ES2EEPROMUtils
 import os
+from gpiozero import PWMLED
 from time import sleep
 
 # some global variables that need to change as we run the program
@@ -162,12 +164,28 @@ def update_LEDs():
 def btn_guess_pressed(channel):
     # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen
     if GPIO.event_detected(channel):
-        get_proximity()
-        GPIO.cleanup()
-        menu()
+        dc = int(accuracy_leds()) # set dc variable for percentage brightness
+        
+        print("dc val is : " + str(dc))
+        #GPIO.cleanup()
+        #menu()
         # Compare the actual value with the user value displayed on the LEDs
         #get_proximity()
     # Change the PWM LED
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(LED_accuracy, GPIO.OUT)
+        pwm = GPIO.PWM(LED_accuracy, 100) #initialise PWM LED 100Hz frequency
+        #pwm.ChangeDutyCycle(dc)
+        #pwm.start(0)
+        #pwm.stop()
+        #dc = get_proximity() # set dc variable to 0 for 0%
+        pwm.start(0)
+        for dc in range(0, 101, 5): # 0 to 100 stepping by 5
+            #print("Entered for loop")
+            pwm.ChangeDutyCycle(dc)
+            sleep(0.05)
+            pwm.stop()
+            #GPIO.cleanup()
     # if it's close enough, adjust the buzzer
     # if it's an exact guess:
     # - Disable LEDs and Buzzer
@@ -178,20 +196,12 @@ def btn_guess_pressed(channel):
     # - Store the scores back to the EEPROM, being sure to update the score count
     pass
 
-# Get proximity of user's guessed answer to actual answer
-def get_proximity():
-    global closeness
-    print("Calculating proximity...")
-    closeness = (guess / value) * 100
-    print("Your answer is " + str(closeness) + "close to the actual answer of " + str(value))
-
 # LED Brightness
 def accuracy_leds():
     # Set the brightness of the LED based on how close the guess is to the answer
-    # - The % brightness should be directly proportional to the % "closeness"
-    # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%
-    # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%
-    pass
+    global closeness
+    closeness = (guess / value) * 100
+    return closeness
 
 # Sound Buzzer
 def trigger_buzzer():
