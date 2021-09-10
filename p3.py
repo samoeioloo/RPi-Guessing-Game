@@ -139,10 +139,35 @@ def btn_increase_pressed(channel):
         increment()
         print("Button Increase pressed")
         print("Guess:" + str(guess))
-
+        update_LEDs()
     pass
+# Update Green LEDs based on current guess
+def update_LEDs():
+    current_guess = [GPIO.LOW, GPIO.LOW, GPIO.LOW]
+    if(guess==1):
+        current_guess[2] = GPIO.HIGH
+    elif(guess==2):
+        current_guess[1] = GPIO.HIGH
+    elif(guess==3):
+        current_guess[1] = GPIO.HIGH
+        current_guess[2] = GPIO.HIGH
+    elif(guess==4):
+        current_guess[0] = GPIO.HIGH
+    elif(guess==5):
+        current_guess[0] = GPIO.HIGH
+        current_guess[2] = GPIO.HIGH
+    elif (guess==6):
+        current_guess[0] = GPIO.HIGH
+        current_guess[1] = GPIO.HIGH
+    elif(guess==7):
+        current_guess[0] = GPIO.HIGH
+        current_guess[1] = GPIO.HIGH
+        current_guess[2] = GPIO.HIGH
 
-
+    # Set LEDs
+    print("Updating values according to guess....")
+    for i in range(len(LED_value)):
+        GPIO.output(LED_value[i], current_guess[i])
 # Guess button
 def btn_guess_pressed(channel):
     # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen
