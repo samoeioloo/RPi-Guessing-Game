@@ -3,10 +3,11 @@ import RPi.GPIO as GPIO
 import random
 import ES2EEPROMUtils
 import os
+from time import sleep
 
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
-
+guess = 0
 # DEFINE THE PINS USED HERE
 LED_value = [17, 27, 22]
 LED_accuracy = 12
@@ -67,20 +68,39 @@ def setup():
     # Setup board mode
 	GPIO.setmode(GPIO.BCM)
     # Setup regular GPIO
+	# Green LEDs
 	for i in range(len(LED_value)):
 		GPIO.setup(LED_value[i], GPIO.OUT)
-		GPIO.output(LED_value[i], GPIO.HIGH)
-	GPIO.setup(btn_increase, GPIO.IN)
-	GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=button_callback)
+		GPIO.output(LED_value[i], GPIO.LOW)
+		#GPIO.output(12, GPIO.HIGH)
+	# Red LED
+	GPIO.setup(LED_accuracy, GPIO.OUT)
+	GPIO.output(LED_accuracy, GPIO.LOW)
+	#Buttons
+	GPIO.setup(btn_increase, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+	GPIO.setup(btn_submit, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+
+	# Setup debouncing and callbacks
+	GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=btn_increase_pressed, bouncetime=300)
+	GPIO.add_event_detect(btn_submit, GPIO.RISING, callback=btn_guess_pressed, bouncetime=300)
+	#GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback=btnEvHnd_f)
 	#GPIO.setup(LED_value[0])
     # Setup PWM channels
     # Setup debouncing and callbacks
 #	GPIO.output(LED_value[0], GPIO.HIGH)
 	print("Setup complete")
 	pass
-
-def button_callback(pin):
-	print("Button pressed")
+#def btnEvHnd_r(pin):
+#	GPIO.output(LED_value[i], GPIO.HIGH)
+#def btnEvHnd_f(pin):
+#	GPIO.output(LED_value[i], GPIO.LOW)
+#def button_callback(pin):
+#	if GPIO.event_detected(btn_increase):
+#		print("Rising edge")
+#		sleep(10)
+#	else:
+#		print("Falling edge")
+#		sleep(10)
 # Load high scores
 def fetch_scores():
     # get however many scores there are
@@ -107,12 +127,19 @@ def save_scores():
 def generate_number():
     return random.randint(0, pow(2, 3)-1)
 
+def increment():
+    global guess
+    guess = guess+1
 
 # Increase button pressed
 def btn_increase_pressed(channel):
     # Increase the value shown on the LEDs
-    # You can choose to have a global variable store the user's current guess,
-    # or just pull the value off the LEDs when a user makes a guess
+# increment guess val
+    if GPIO.event_detected(channel):
+        increment()
+        print("Button Increase pressed")
+        print("Guess:" + str(guess))
+
     pass
 
 
