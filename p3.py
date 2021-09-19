@@ -88,6 +88,7 @@ def setup():
         # Buzzer
 	GPIO.setup(buzzer, GPIO.OUT)
         # Setup PWM channels
+	global pwm,  pwmB
 	pwm = GPIO.PWM(LED_accuracy, 1000)
 	pwm.start(0)
         # Buzzer PWM 
@@ -172,6 +173,7 @@ def update_LEDs():
         GPIO.output(LED_value[i], current_guess[i])
 # Guess button
 def btn_guess_pressed(channel):
+    global numGuesses
     # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen
     if GPIO.event_detected(channel):
         # Compare the actual value with the user value displayed on the LEDs
@@ -186,6 +188,22 @@ def btn_guess_pressed(channel):
             # Starting block for EEPROM
              start_block = eeprom.read_byte(0)
              block = start_block
+             if start_block == 0:
+                 # Go to next
+                 block += 1
+                 eeprom.write_block(block,[ord(userName[0]), ord(userName[2]), ord(userName[2]), numGuesses])
+             eeprom.write_byte(0, start_block+1) #next block
+
+
+             scores = []
+
+             for i in range(1, start_block+1):
+                 scores.append(eeprom.read_block(i, 4))
+             sortedScores = sorted(scores, key = lambda score: score[3])
+             for i in range(len(sortedSscores)):
+                 eeprom.write_block(i+1, sortedScores[i])
+             GPIO.cleanup()
+             menu()
     # Change the PWM LED
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(LED_accuracy, GPIO.OUT)
