@@ -17,7 +17,7 @@ LED_value = [17, 27, 22]
 LED_accuracy = 12
 btn_submit = 23
 btn_increase = 24
-buzzer = None
+buzzer = 13
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
 
@@ -74,23 +74,25 @@ def setup():
     # Setup board mode
 	GPIO.setmode(GPIO.BCM)
     # Setup regular GPIO
-	# Green LEDs
+
 	for i in range(len(LED_value)):
 		GPIO.setup(LED_value[i], GPIO.OUT)
 		GPIO.output(LED_value[i], GPIO.LOW)
-		#GPIO.output(12, GPIO.HIGH)
-	# Red LED
+		
+	
 	GPIO.setup(LED_accuracy, GPIO.OUT)
 	GPIO.output(LED_accuracy, GPIO.LOW)
 	#Buttons
 	GPIO.setup(btn_increase, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 	GPIO.setup(btn_submit, GPIO.IN, pull_up_down = GPIO.PUD_UP)
         # Buzzer
-	GPIO.setup(13, GPIO.OUT)
-	for i in range(5):
-
-		GPIO.output(13, GPIO.HIGH)
-		sleep(2)
+	GPIO.setup(buzzer, GPIO.OUT)
+        # Setup PWM channels
+	pwm = GPIO.PWM(LED_accuracy, 1000)
+	pwm.start(0)
+        # Buzzer PWM 
+	pwmB = GPIO.PWM(buzzer, 1)
+	pwmB.start(0)
 	# Setup debouncing and callbacks
 	GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=btn_increase_pressed, bouncetime=300)
 	GPIO.add_event_detect(btn_submit, GPIO.RISING, callback=btn_guess_pressed, bouncetime=300)
@@ -174,6 +176,9 @@ def btn_guess_pressed(channel):
     if GPIO.event_detected(channel):
         dc = int(accuracy_leds()) # set dc variable for percentage brightness
         
+        if(guess == value):
+             pwmB.ChangeDutyCycle(0)
+             GPIO.output(LED_accuracy, GPIO.LOW) # set to low
         print("dc val is : " + str(dc))
         #GPIO.cleanup()
         #menu()
