@@ -174,16 +174,18 @@ def update_LEDs():
 def btn_guess_pressed(channel):
     # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen
     if GPIO.event_detected(channel):
-        dc = int(accuracy_leds()) # set dc variable for percentage brightness
-        
+        # Compare the actual value with the user value displayed on the LEDs
         if(guess == value):
              pwmB.ChangeDutyCycle(0)
              GPIO.output(LED_accuracy, GPIO.LOW) # set to low
-        print("dc val is : " + str(dc))
-        #GPIO.cleanup()
-        #menu()
-        # Compare the actual value with the user value displayed on the LEDs
-        #get_proximity()
+             
+             print("Guess correct!")
+             userName = input("Please enter your name \n")
+
+
+            # Starting block for EEPROM
+             start_block = eeprom.read_byte(0)
+             block = start_block
     # Change the PWM LED
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(LED_accuracy, GPIO.OUT)
