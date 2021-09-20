@@ -11,6 +11,7 @@ from time import sleep
 end_of_game = None  # set if the user wins or ends the game
 guess = 0
 value = 0
+numGuesses = 0
 #global pwm
 # DEFINE THE PINS USED HERE
 LED_value = [17, 27, 22]
@@ -71,13 +72,13 @@ def display_scores(count, raw_data):
         if i > 3:
             break
         lists = eeprom.read_block(i, 4)
-        print(chr(lists[0]), chr(lists[1]), chr(lists[2]), " took ", lists[3], " guesses ", sep="")
+        print( chr(lists[0]) , chr(lists[1]) , chr(lists[2]) , " took " , lists[3] , " guesses ")
     pass
 
 
 # Setup Pins
 def setup():
-	print("Setting up...")
+#	print("Setting up...")
     # Setup board mode
 	GPIO.setmode(GPIO.BCM)
     # Setup regular GPIO
@@ -109,7 +110,7 @@ def setup():
     # Setup PWM channels
 	#pwm = GPIO.PWM(LED_accuracy, 100)
 	#pwm.start(0)
-	print("Setup complete")
+#	print("Setup complete")
 	pass
 # Load high scores
 def fetch_scores():
@@ -177,7 +178,7 @@ def update_LEDs():
         current_guess[2] = GPIO.HIGH
 
     # Set LEDs
-    print("Updating values according to guess....")
+ #   print("Updating values according to guess....")
     for i in range(len(LED_value)):
         GPIO.output(LED_value[i], current_guess[i])
 # Guess button
@@ -190,7 +191,7 @@ def btn_guess_pressed(channel):
              pwmB.ChangeDutyCycle(0)
              GPIO.output(LED_accuracy, GPIO.LOW) # set to low
              
-             print("Guess correct!")
+             print("Well done!")
              userName = input("Please enter your name \n")
 
 
@@ -199,7 +200,7 @@ def btn_guess_pressed(channel):
              block = start_block
              if start_block == 0:
                  # Go to next
-                 block += 1
+                 block = 1
                  eeprom.write_block(block,[ord(userName[0]), ord(userName[2]), ord(userName[2]), numGuesses])
              eeprom.write_byte(0, start_block+1) #next block
 
@@ -257,7 +258,7 @@ def trigger_buzzer():
         pwmB.ChangeFrequency(4)
 
     pwmB.ChangeDutyCycle(50)
-    time.sleep(0.3)
+    sleep(0.6)
     GPIO.output(buzzer, GPIO.HIGH)
     pass
 
