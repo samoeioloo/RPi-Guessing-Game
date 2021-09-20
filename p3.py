@@ -224,8 +224,11 @@ def btn_guess_pressed(channel):
 def accuracy_leds():
     # Set the brightness of the LED based on how close the guess is to the answer
     global closeness
-    closeness = (guess / value) * 100
-    return closeness
+    closeness = abs(((value - guess) / (value+1) * 100))
+
+    if closeness > 100:
+        closeness = 95
+    return 100 - closeness
 
 # Sound Buzzer
 def trigger_buzzer():
