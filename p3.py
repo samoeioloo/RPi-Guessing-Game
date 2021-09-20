@@ -206,6 +206,10 @@ def btn_guess_pressed(channel):
              menu()
         else:
             trigger_buzzer()
+            pwm.ChangeDutyCycle(accuracy_leds())
+            GPIO.output(LED_accuracy, GPIO.HIGH)
+            numGuesses += 1
+            print("Incorrect")
     # if it's close enough, adjust the buzzer
     # if it's an exact guess:
     # - Disable LEDs and Buzzer
