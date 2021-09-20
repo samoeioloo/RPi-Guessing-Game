@@ -198,12 +198,13 @@ def btn_guess_pressed(channel):
 
             # Starting block for EEPROM
              start_block = eeprom.read_byte(0)
+             print("Start block: ", start_block)
              block = start_block
              if start_block == 0:
                  # Go to next
                  block = 1
                  eeprom.write_block(block,[ord(userName[0]), ord(userName[2]), ord(userName[2]), numGuesses])
-             eeprom.write_byte(0, start_block+1) #next block
+             eeprom.write_byte(0, start_block) #next block
 
 
              scores = []
