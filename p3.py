@@ -86,8 +86,8 @@ def setup():
 	for i in range(len(LED_value)):
 		GPIO.setup(LED_value[i], GPIO.OUT)
 		GPIO.output(LED_value[i], GPIO.LOW)
-		
-	
+
+
 	GPIO.setup(LED_accuracy, GPIO.OUT)
 	GPIO.output(LED_accuracy, GPIO.LOW)
 	#Buttons
@@ -99,13 +99,13 @@ def setup():
 	global pwm,  pwmB
 	pwm = GPIO.PWM(LED_accuracy, 1000)
 	pwm.start(0)
-        # Buzzer PWM 
+        # Buzzer PWM
 	pwmB = GPIO.PWM(buzzer, 1)
 	pwmB.start(0)
 	# Setup debouncing and callbacks
 	GPIO.add_event_detect(btn_increase, GPIO.RISING, callback=btn_increase_pressed, bouncetime=300)
 	GPIO.add_event_detect(btn_submit, GPIO.RISING, callback=btn_guess_pressed, bouncetime=300)
-	
+
 
     # Setup PWM channels
 	#pwm = GPIO.PWM(LED_accuracy, 100)
@@ -190,7 +190,8 @@ def btn_guess_pressed(channel):
         if(guess == value):
              pwmB.ChangeDutyCycle(0)
              GPIO.output(LED_accuracy, GPIO.LOW) # set to low
-             
+             GPIO.output(buzzer, GPIO.LOW)
+
              print("Well done!")
              userName = input("Please enter your name \n")
 
