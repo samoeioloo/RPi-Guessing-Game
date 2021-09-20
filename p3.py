@@ -193,7 +193,7 @@ def btn_guess_pressed(channel):
              GPIO.output(buzzer, GPIO.LOW)
 
              print("Well done!")
-             userName = input("Please enter your name \n")
+             userName = input("Enter your name \n")
 
 
             # Starting block for EEPROM
@@ -203,7 +203,7 @@ def btn_guess_pressed(channel):
              if start_block == 0:
                  # Go to next
                  block = 1
-                 eeprom.write_block(block,[ord(userName[0]), ord(userName[2]), ord(userName[2]), numGuesses])
+                 eeprom.write_block(block, [userName[0], userName[2], userName[2], numGuesses])
              eeprom.write_byte(0, start_block) #next block
 
 
@@ -212,9 +212,10 @@ def btn_guess_pressed(channel):
              for i in range(1, start_block+1):
                  scores.append(eeprom.read_block(i, 4))
              sortedScores = sorted(scores, key = lambda score: score[3])
-             for i in range(len(sortedSscores)):
+             for i in range(len(sortedScores)):
                  eeprom.write_block(i+1, sortedScores[i])
              GPIO.cleanup()
+             end_of_game = True
              menu()
         else:
             trigger_buzzer()
