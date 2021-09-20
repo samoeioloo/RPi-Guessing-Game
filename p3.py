@@ -55,6 +55,7 @@ def menu():
         print("Use the buttons on the Pi to make and submit your guess!")
         print("Press and hold the guess button to cancel your game")
         value = generate_number()
+        print("Value is ", value)
         while not end_of_game:
             pass
 
