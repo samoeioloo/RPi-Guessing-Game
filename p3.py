@@ -65,6 +65,13 @@ def display_scores(count, raw_data):
     # print the scores to the screen in the expected format
     print("There are {} scores. Here are the top 3!".format(count))
     # print out the scores in the required format
+    numScores = eeprom.read_byte(0)
+
+    for i in range(1, numScores):
+        if i > 3:
+            break
+        lists = eeprom.read_block(i, 4)
+        print(chr(lists[0]), chr(lists[1]), chr(lists[2]), " took ", lists[3], " guesses ", sep="")
     pass
 
 
@@ -107,11 +114,13 @@ def setup():
 # Load high scores
 def fetch_scores():
     # get however many scores there are
-    score_count = None
+    score_count = eeprom.read_byte(0)
     # Get the scores
+    scores = []
 
     # convert the codes back to ascii
-
+    for i in range(1, score_count):
+        scores.append(eeprom.read_block(i, 4))
     # return back the results
     return score_count, scores
 
