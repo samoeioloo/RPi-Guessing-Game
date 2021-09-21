@@ -82,17 +82,19 @@ def setup():
     GPIO.setmode(GPIO.BCM)
 
     # Setup regular GPIO
-    GPIO.setup(LED_value[0], GPIO.OUT)
-    GPIO.setup(LED_value[1], GPIO.OUT)
-    GPIO.setup(LED_value[2], GPIO.OUT)
+    for i in range(len(LED_value)):
+        GPIO.setup(LED_value[i], GPIO.OUT)
+    #GPIO.setup(LED_value[0], GPIO.OUT)
+    #GPIO.setup(LED_value[1], GPIO.OUT)
+    #GPIO.setup(LED_value[2], GPIO.OUT)
     GPIO.setup(LED_accuracy, GPIO.OUT)
     GPIO.setup(buzzer, GPIO.OUT)
 
     # Setup PWM channels
-    global pwm_LED
-    pwm_LED = GPIO.PWM(LED_accuracy, 1000)
-    global pwm_BUZZER
-    pwm_BUZZER = GPIO.PWM(buzzer, 1000)
+    global pwmLED
+    pwmLED = GPIO.PWM(LED_accuracy, 1000)
+    global pwm_B
+    pwm_B = GPIO.PWM(buzzer, 1000)
 
     # Setup debouncing and callbacks
     GPIO.setup(btn_increase, GPIO.IN, pull_up_down=GPIO.PUD_UP)
