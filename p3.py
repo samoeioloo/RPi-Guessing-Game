@@ -153,42 +153,38 @@ def generate_number():
 
 # Increase button pressed
 def btn_increase_pressed(channel):
-    # Global variable storeing the user's current guess
-    global guess, LED_value
-    GPIO.output(LED_value[0],0)
-    GPIO.output(LED_value[1],0)
-    GPIO.output(LED_value[2],0)
+    
+    global guess
+    global LED_value
+    #Initially all LOW for 0
+    GPIO.output(LED_value[0], GPIO.LOW)
+    GPIO.output(LED_value[1], GPIO.LOW)
+    GPIO.output(LED_value[2], GPIO.LOW)
 
-    # Increase the value shown on the LEDs
+    # Increment guess
     guess += 1
-    if guess > 7:    #ensure guess stays in range
+    if guess > 7:   
         guess = 0
 
     if (guess == 1):
-        GPIO.output(LED_value[0],1)
-
+        GPIO.output(LED_value[0], GPIO.HIGH)
     elif (guess == 2):
-        GPIO.output(LED_value[1],1)
-
+        GPIO.output(LED_value[1], GPIO.HIGH)
     elif (guess == 3):
-        GPIO.output(LED_value[2],1)
-
+        GPIO.output(LED_value[0], GPIO.HIGH)
+        GPIO.output(LED_value[1], GPIO.HIGH)
     elif (guess == 4):
-        GPIO.output(LED_value[0],1)
-        GPIO.output(LED_value[1],1)
-
+        GPIO.output(LED_value[2], GPIO.HIGH)
     elif (guess == 5):
-        GPIO.output(LED_value[0],1)
-        GPIO.output(LED_value[2],1)
-
+        GPIO.output(LED_value[2], GPIO.HIGH)
+        GPIO.output(LED_value[1], GPIO.HIGH)
     elif (guess == 6):
-        GPIO.output(LED_value[1],1)
-        GPIO.output(LED_value[2],1)
-
-    elif (guess ==7):
-        GPIO.output(LED_value[0],1)
-        GPIO.output(LED_value[1],1)
-        GPIO.output(LED_value[2],1)
+        GPIO.output(LED_value[2], GPIO.HIGH)
+        GPIO.output(LED_value[1], GPIO.HIGH)
+    elif (guess == 7):
+        GPIO.output(LED_value[0], GPIO.HIGH)
+        GPIO.output(LED_value[1], GPIO.HIGH)
+        GPIO.output(LED_value[2], GPIO.HIGH)
 
 pass
 
