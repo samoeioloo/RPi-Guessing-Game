@@ -106,25 +106,25 @@ def setup():
 # Load high scores
 def fetch_scores():
     # get however many scores there are
-    score_count = eeprom.read_byte(0)
+    allScores = eeprom.read_byte(0)
 
     # Get the scores
     scores = []
-    for i in range(1, score_count+1):
+    for i in range(1, allScores+1):
         scores.append(eeprom.read_block(i,4))
 
     # convert the codes back to ascii
-    for r in range(0,score_count):
+    for r in range(0,allScores):
         for n in range(0,3):
             scores[r][n] = chr(scores[r][n])
 
     # return back the results
-    return score_count, scores
+    return allScores, scores
 
 # Save high scores
 def save_scores(userName, numGuesses):
     # fetch score
-    score_count, new_scores= fetch_scores()
+    allScores, new_scores= fetch_scores()
 
     # include new score
     new_scores.append([userName[0],userName[1],userName[2],numGuesses])
@@ -133,7 +133,7 @@ def save_scores(userName, numGuesses):
     new_scores.sort(key=lambda x: x[3])
 
     # update total amount of scores
-    score_count += 1
+    allScores += 1
 
     # write new scores
     new_score_list =[]
@@ -142,7 +142,7 @@ def save_scores(userName, numGuesses):
             new_score_list.append(ord(score[char]))
         new_score_list.append(score[3])
     eeprom.write_block(1, new_score_list)
-    eeprom.write_byte(0,score_count)
+    eeprom.write_byte(0, allScores)
     pass
 
 
@@ -203,7 +203,7 @@ def btn_guess_pressed(channel):
     # checkif the button is pressed andheld
     if timeHeld > 2:
         
-        GPIO.cleanup() # clear GPIO
+        #GPIO.cleanup() # clear GPIO
         pwmLED.stop() # resetting vals
         pwm_B.stop()
 
@@ -212,6 +212,7 @@ def btn_guess_pressed(channel):
         value = 0
 
         end_of_game = True # game over
+        GPIO.cleanup() # clear GPIO
         menu() # loop to menu
         return
 
@@ -247,6 +248,7 @@ def btn_guess_pressed(channel):
         numGuesses = 0
         value = 0
         end_of_game = True
+        GPIO.cleanup()
         menu()
     pass
 
