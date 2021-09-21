@@ -57,8 +57,11 @@ def menu():
         print("Press and hold the guess button to cancel your game")
 
         value = generate_number()
+<<<<<<< HEAD
         print(value)
         print(scoreCount)
+=======
+>>>>>>> parent of 7c18eb9 (Tracing values error)
         while not end_of_game:
              if GPIO.input(btn_increase) == 0:
                 btn_increase_pressed(btn_increase)
