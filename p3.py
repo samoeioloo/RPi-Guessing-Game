@@ -157,9 +157,8 @@ def btn_increase_pressed(channel):
     global guess
     global LED_value
     #Initially all LOW for 0
-    GPIO.output(LED_value[0], GPIO.LOW)
-    GPIO.output(LED_value[1], GPIO.LOW)
-    GPIO.output(LED_value[2], GPIO.LOW)
+    for i in range(len(LED_value)):
+        GPIO.output(LED_value[i], GPIO.LOW)
 
     # Increment guess
     guess += 1
@@ -203,7 +202,7 @@ def btn_guess_pressed(channel):
     # checkif the button is pressed andheld
     if timeHeld > 2:
         
-        #GPIO.cleanup() # clear GPIO
+        GPIO.cleanup() # clear GPIO
         pwmLED.stop() # resetting vals
         pwm_B.stop()
 
@@ -212,26 +211,25 @@ def btn_guess_pressed(channel):
         value = 0
 
         end_of_game = True # game over
-        GPIO.cleanup() # clear GPIO
+        #GPIO.cleanup() # clear GPIO
         menu() # loop to menu
         return
 
     # Compare the actual value with the user value displayed on the LEDs
     numGuesses += 1
-    if (guess == value) == False:
+    if (guess != value):
     # Change the PWM LED
         accuracy_leds()
 
     # if it's close enough, adjust the buzzer
-        if (abs(guess-value)<3):
+        if (abs(guess-value)<4):
             trigger_buzzer()
     # if it's an exact guess:
     elif guess == value:
 
     # - Disable LEDs and Buzzer
-        GPIO.output(LED_value[0], GPIO.LOW)
-        GPIO.output(LED_value[1], GPIO.LOW)
-        GPIO.output(LED_value[2], GPIO.LOW)
+        for i in range(len(LED_value)):
+            GPIO.output(LED_value[i], GPIO.LOW)
         pwmLED.stop()
         pwm_B.stop()
 
@@ -264,7 +262,7 @@ def accuracy_leds():
     global pwmLED
     global value
     pwmLED.start(50)
-    if (guess < value):
+    if (guess <= value):
         pwmLED.ChangeDutyCycle(int(round((guess/value)*100)))
     else: 
        # if above guess value
